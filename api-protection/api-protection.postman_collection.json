@@ -1,0 +1,660 @@
+{
+	"info": {
+		"_postman_id": "dc707bcc-f03d-45f6-9f42-b988a4c9e0d1",
+		"name": "ISAM API protection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Request REST Resource with OAuth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "63dc047c-cbc5-48ff-bb56-363fba769f35",
+						"exec": [
+							"pm.test(\"expect status code to be 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"expect response body to exist\", function() {",
+							"   pm.response.to.have.body();",
+							"});",
+							"",
+							"pm.test(\"expect response body to have location\", function() {",
+							"   pm.response.to.have.jsonBody(\"location\");",
+							"   let jsonData = JSON.parse(responseBody);",
+							"   pm.environment.set(\"location\", jsonData.location);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{demo_method_host}}{{demo_junction}}/mobile-demo/diag/rest.jsp",
+					"host": [
+						"{{demo_method_host}}{{demo_junction}}"
+					],
+					"path": [
+						"mobile-demo",
+						"diag",
+						"rest.jsp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Run ROPC Grant Flow (read scope)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "52550c91-afc6-4c8c-8279-3af4facd8965",
+						"exec": [
+							"pm.test(\"expect status code to be 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"expect response body to exist\", function() {",
+							"   pm.response.to.have.body();",
+							"});",
+							"",
+							"pm.test(\"expect response body to have access_token\", function() {",
+							"   pm.response.to.have.jsonBody(\"access_token\");",
+							"   let jsonData = JSON.parse(responseBody);",
+							"   pm.environment.set(\"access_token\", jsonData.access_token);",
+							"});",
+							"",
+							"pm.test(\"expect response body to have refresh_token\", function() {",
+							"   pm.response.to.have.jsonBody(\"refresh_token\");",
+							"   let jsonData = JSON.parse(responseBody);",
+							"   pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+							"});",
+							"",
+							"",
+							"pm.test(\"expect access_token to be set\", function () { ",
+							"    pm.expect(pm.environment.get(\"access_token\")).to.exist; ",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "{{testuser_id}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{testuser_pw}}",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "read",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{aac_method_host}}{{aac_junction}}/sps/oauth/oauth20/token",
+					"host": [
+						"{{aac_method_host}}{{aac_junction}}"
+					],
+					"path": [
+						"sps",
+						"oauth",
+						"oauth20",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Run Refresh Token Grant Flow",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "52550c91-afc6-4c8c-8279-3af4facd8965",
+						"exec": [
+							"pm.test(\"expect status code to be 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"expect response body to exist\", function() {",
+							"   pm.response.to.have.body();",
+							"});",
+							"",
+							"pm.test(\"expect response body to have access_token\", function() {",
+							"   pm.response.to.have.jsonBody(\"access_token\");",
+							"   let jsonData = JSON.parse(responseBody);",
+							"   pm.environment.set(\"access_token\", jsonData.access_token);",
+							"});",
+							"",
+							"pm.test(\"expect response body to have refresh_token\", function() {",
+							"   pm.response.to.have.jsonBody(\"refresh_token\");",
+							"   let jsonData = JSON.parse(responseBody);",
+							"   pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+							"});",
+							"",
+							"",
+							"pm.test(\"expect access_token to be set\", function () { ",
+							"    pm.expect(pm.environment.get(\"access_token\")).to.exist; ",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"type": "text"
+						},
+						{
+							"key": "refresh_token",
+							"value": "{{refresh_token}}",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{aac_method_host}}{{aac_junction}}/sps/oauth/oauth20/token",
+					"host": [
+						"{{aac_method_host}}{{aac_junction}}"
+					],
+					"path": [
+						"sps",
+						"oauth",
+						"oauth20",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Introspect Access Token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{demo_method_host}}{{aac_junction}}/sps/oauth/oauth20/introspect",
+					"host": [
+						"{{demo_method_host}}{{aac_junction}}"
+					],
+					"path": [
+						"sps",
+						"oauth",
+						"oauth20",
+						"introspect"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Revoke Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "52550c91-afc6-4c8c-8279-3af4facd8965",
+						"exec": [
+							"pm.test(\"expect status code to be 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"//pm.environment.unset(\"access_token\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{aac_method_host}}{{aac_junction}}/sps/oauth/oauth20/revoke",
+					"host": [
+						"{{aac_method_host}}{{aac_junction}}"
+					],
+					"path": [
+						"sps",
+						"oauth",
+						"oauth20",
+						"revoke"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Run ROPC Grant Flow (read & write scopes)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "52550c91-afc6-4c8c-8279-3af4facd8965",
+						"exec": [
+							"pm.test(\"expect status code to be 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"expect response body to exist\", function() {",
+							"   pm.response.to.have.body();",
+							"});",
+							"",
+							"pm.test(\"expect response body to have access_token\", function() {",
+							"   pm.response.to.have.jsonBody(\"access_token\");",
+							"   let jsonData = JSON.parse(responseBody);",
+							"   pm.environment.set(\"access_token\", jsonData.access_token);",
+							"});",
+							"",
+							"pm.test(\"expect response body to have refresh_token\", function() {",
+							"   pm.response.to.have.jsonBody(\"refresh_token\");",
+							"   let jsonData = JSON.parse(responseBody);",
+							"   pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+							"});",
+							"",
+							"",
+							"pm.test(\"expect access_token to be set\", function () { ",
+							"    pm.expect(pm.environment.get(\"access_token\")).to.exist; ",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "{{testuser_id}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{testuser_pw}}",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "read write",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{aac_method_host}}{{aac_junction}}/sps/oauth/oauth20/token",
+					"host": [
+						"{{aac_method_host}}{{aac_junction}}"
+					],
+					"path": [
+						"sps",
+						"oauth",
+						"oauth20",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PasswordAuth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "52550c91-afc6-4c8c-8279-3af4facd8965",
+						"exec": [
+							"if (responseCode.code == 200) {",
+							"  pm.test(\"expect response body to exist\", function() {",
+							"    pm.response.to.have.body();",
+							"  });",
+							"",
+							"  pm.test(\"expect response body to have location\", function() {",
+							"    pm.response.to.have.jsonBody(\"location\");",
+							"    let jsonData = JSON.parse(responseBody);",
+							"    pm.environment.set(\"location\", jsonData.location);",
+							"  });",
+							"}",
+							"",
+							"if (responseCode.code == 204) {",
+							"  pm.environment.unset(\"location\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"operation\": \"verify\",\n\t\"username\": \"{{testuser_id}}\",\n\t\"password\": \"{{testuser_pw}}\"\n}"
+				},
+				"url": {
+					"raw": "{{aac_method_host}}{{location}}",
+					"host": [
+						"{{aac_method_host}}{{location}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Forbidden URL",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{aac_method_host}}{{aac_junction}}/badurl",
+					"host": [
+						"{{aac_method_host}}{{aac_junction}}"
+					],
+					"path": [
+						"badurl"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "End Reverse Proxy Session",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{demo_method_host}}/pkmslogout",
+					"host": [
+						"{{demo_method_host}}"
+					],
+					"path": [
+						"pkmslogout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
