@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "784ad8f1-804b-451c-8f36-13bdab339682",
+		"_postman_id": "10b16889-c8d9-4f99-94ae-6e8d4e651b30",
 		"name": "IBM Cloud Identity V2.1",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -764,7 +764,6 @@
 							"listen": "test",
 							"script": {
 								"id": "71fbff53-b10a-47a3-a52e-e024becac90e",
-								"type": "text/javascript",
 								"exec": [
 									"pm.test(\"expect status code to be 202\", function() {",
 									"    pm.response.to.have.status(202);",
@@ -784,27 +783,19 @@
 									"pm.test(\"expect email_txnid to be set\", function () { ",
 									"    pm.expect(pm.environment.get(\"email_txnid\")).to.exist; ",
 									"});",
-									"",
-									"pm.environment.unset('correlation');",
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"id": "98d63f10-e616-4041-b057-f706c19293a9",
-								"type": "text/javascript",
 								"exec": [
-									"// build a correlation variable with random 4-digit value",
-									"var numstr = \"\"+Math.floor(Math.random()*1000);",
-									"var pad = \"0000\";",
-									"var correlation = pad.substring(0, pad.length - numstr.length) + numstr;",
-									"console.log(\"correlation: \" + correlation);",
-									"postman.setEnvironmentVariable(\"correlation\", correlation);",
-									"",
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -818,7 +809,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"correlation\": \"{{correlation}}\",\r\n  \"otpDeliveryEmailAddress\": \"{{test_email}}\"\r\n}"
+							"raw": "{\r\n  \"otpDeliveryEmailAddress\": \"{{test_email}}\"\r\n}"
 						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/emailotp/transient/verification",
@@ -1176,7 +1167,6 @@
 							"listen": "test",
 							"script": {
 								"id": "6b2e5704-b92b-484a-9d13-4e617acf1d47",
-								"type": "text/javascript",
 								"exec": [
 									"pm.test(\"expect status code to be 202\", function() {",
 									"    pm.response.to.have.status(202);",
@@ -1197,26 +1187,19 @@
 									"    pm.expect(pm.environment.get(\"sms_txnid\")).to.exist; ",
 									"});",
 									"",
-									"pm.environment.unset('correlation');",
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"id": "add0b068-690f-42d7-8193-98c9fbb1acf5",
-								"type": "text/javascript",
 								"exec": [
-									"// build a correlation variable with random 4-digit value",
-									"var numstr = \"\"+Math.floor(Math.random()*1000);",
-									"var pad = \"0000\";",
-									"var correlation = pad.substring(0, pad.length - numstr.length) + numstr;",
-									"console.log(\"correlation: \" + correlation);",
-									"postman.setEnvironmentVariable(\"correlation\", correlation);",
-									"",
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -1230,7 +1213,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"correlation\": \"{{correlation}}\",\r\n  \"otpDeliveryMobileNumber\": \"{{test_phone}}\"\r\n}"
+							"raw": "{\r\n  \"otpDeliveryMobileNumber\": \"{{test_phone}}\"\r\n}"
 						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/smsotp/transient/verification",
