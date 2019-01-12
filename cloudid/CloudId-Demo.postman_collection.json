@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "10b16889-c8d9-4f99-94ae-6e8d4e651b30",
+		"_postman_id": "b3a32108-6c4e-4950-8247-a2a201e00a84",
 		"name": "IBM Cloud Identity V2.1",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -77,46 +77,16 @@
 							]
 						},
 						"url": {
-							"raw": "{{scheme}}://{{hostname}}/v1.0/endpoint/default/token",
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/token",
 							"protocol": "{{scheme}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"path": [
-								"v1.0",
+								"oidc",
 								"endpoint",
 								"default",
 								"token"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "#User Info (/v1.0/endpoint/default/userinfo)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{access_token}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{scheme}}://{{hostname}}/v1.0/endpoint/default/userinfo",
-							"protocol": "{{scheme}}",
-							"host": [
-								"{{hostname}}"
-							],
-							"path": [
-								"v1.0",
-								"endpoint",
-								"default",
-								"userinfo"
 							]
 						}
 					},
@@ -158,16 +128,102 @@
 							]
 						},
 						"url": {
-							"raw": "{{scheme}}://{{hostname}}/v1.0/endpoint/default/introspect",
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/introspect",
 							"protocol": "{{scheme}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"path": [
-								"v1.0",
+								"oidc",
 								"endpoint",
 								"default",
 								"introspect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#User Info (/v1.0/endpoint/default/userinfo)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/userinfo",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"userinfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#Revoke (/oidc/endpoint/default/revoke)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{client_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/revoke",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"revoke"
 							]
 						}
 					},
@@ -417,6 +473,130 @@
 				},
 				{
 					"name": "#Get user by userName (/v2.0/Users)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9354ecf5-3e1c-4ee5-858a-76d2a2de21e2",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"expect response body to exist\", function() {",
+									"   pm.response.to.have.body();",
+									"});",
+									"",
+									"pm.test(\"expect response body to have totalResults\", function() {",
+									"   pm.response.to.have.jsonBody(\"totalResults\"); ",
+									"});",
+									"",
+									"pm.test(\"expect totalResults = 1\", function() {",
+									"   pm.expect(pm.response.json().totalResults).to.equal(1);",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"test_userid\", jsonData.Resources[0].id);",
+									"});",
+									"",
+									"pm.test(\"expect test_userid to be set\", function () { ",
+									"    pm.expect(pm.environment.get(\"test_userid\")).to.exist; ",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{hostname}}/v2.0/Users?filter=userName+eq+\"{{test_username}}\"",
+							"protocol": "https",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v2.0",
+								"Users"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "userName+eq+\"{{test_username}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Applications",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9354ecf5-3e1c-4ee5-858a-76d2a2de21e2",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"expect response body to exist\", function() {",
+									"   pm.response.to.have.body();",
+									"});",
+									"",
+									"pm.test(\"expect response body to have totalResults\", function() {",
+									"   pm.response.to.have.jsonBody(\"totalResults\"); ",
+									"});",
+									"",
+									"pm.test(\"expect totalResults = 1\", function() {",
+									"   pm.expect(pm.response.json().totalResults).to.equal(1);",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"test_userid\", jsonData.Resources[0].id);",
+									"});",
+									"",
+									"pm.test(\"expect test_userid to be set\", function () { ",
+									"    pm.expect(pm.environment.get(\"test_userid\")).to.exist; ",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{hostname}}/v2.0/Users?filter=userName+eq+\"{{test_username}}\"",
+							"protocol": "https",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v2.0",
+								"Users"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "userName+eq+\"{{test_username}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Applications Copy",
 					"event": [
 						{
 							"listen": "test",
@@ -8467,13 +8647,13 @@
 							]
 						},
 						"url": {
-							"raw": "{{scheme}}://{{hostname}}/v1.0/endpoint/default/device_authorization",
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/device_authorization",
 							"protocol": "{{scheme}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"path": [
-								"v1.0",
+								"oidc",
 								"endpoint",
 								"default",
 								"device_authorization"
@@ -8504,7 +8684,13 @@
 									"   pm.environment.set(\"access_token\", jsonData.access_token);",
 									"   pm.environment.unset('device_code');",
 									"});",
-									""
+									"",
+									"pm.test(\"expect response body to have refresh_token\", function() {",
+									"   pm.response.to.have.jsonBody(\"refresh_token\");",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+									"   pm.environment.unset('device_code');",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -8544,13 +8730,13 @@
 							]
 						},
 						"url": {
-							"raw": "{{scheme}}://{{hostname}}/v1.0/endpoint/default/token",
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/token",
 							"protocol": "{{scheme}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"path": [
-								"v1.0",
+								"oidc",
 								"endpoint",
 								"default",
 								"token"
@@ -8558,8 +8744,292 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Introspect (/v1.0/endpoint/default/introspect)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{app_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{app_client_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/introspect",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"introspect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#User Info (/v1.0/endpoint/default/userinfo)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/userinfo",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"userinfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Run Refresh Token Grant Flow",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "52550c91-afc6-4c8c-8279-3af4facd8965",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"expect response body to exist\", function() {",
+									"   pm.response.to.have.body();",
+									"});",
+									"",
+									"pm.test(\"expect response body to have access_token\", function() {",
+									"   pm.response.to.have.jsonBody(\"access_token\");",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"access_token\", jsonData.access_token);",
+									"});",
+									"",
+									"pm.test(\"expect response body to have refresh_token\", function() {",
+									"   pm.response.to.have.jsonBody(\"refresh_token\");",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "refresh_token",
+									"type": "text"
+								},
+								{
+									"key": "refresh_token",
+									"value": "{{refresh_token}}",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{app_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{app_client_secret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/token",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#Revoke Access (/oidc/endpoint/default/revoke)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{app_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{app_client_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/revoke",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"revoke"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#Revoke Refresh (/oidc/endpoint/default/revoke)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{app_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{app_client_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/revoke",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"revoke"
+							]
+						}
+					},
+					"response": []
 				}
 			],
+			"auth": {
+				"type": "noauth"
+			},
 			"event": [
 				{
 					"listen": "prerequest",
@@ -8677,7 +9147,6 @@
 							"listen": "test",
 							"script": {
 								"id": "42aa44c6-450e-4bf7-b071-9c24a69fc31a",
-								"type": "text/javascript",
 								"exec": [
 									"pm.test(\"expect status code to be 200\", function() {",
 									"    pm.response.to.have.status(200);",
@@ -8699,22 +9168,24 @@
 									"",
 									"let username = pm.variables.get('admin_username');",
 									"pm.environment.set(username + '.token', authKey);",
+									"pm.environment.set('access_token', authKey);",
 									"",
 									"pm.environment.unset('state_id');",
 									"pm.environment.unset('jsessionid');",
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"id": "c2b2c357-068c-4209-bc43-bcab7865f54a",
-								"type": "text/javascript",
 								"exec": [
 									"let username = pm.variables.get('admin_username');",
 									"pm.environment.unset(username + '.token');"
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -8941,18 +9412,18 @@
 							"listen": "test",
 							"script": {
 								"id": "2ecb2f03-c77c-484f-b469-c753a210e462",
-								"type": "text/javascript",
 								"exec": [
 									"pm.test(\"expect status code to be 204\", function() {",
 									"    pm.response.to.have.status(204);",
 									"    pm.environment.unset('clientUri');",
 									"    pm.environment.unset('access_token');",
-									"    pm.environment.unset('client_id');",
-									"    pm.environment.unset('client_secret');",
+									"    pm.environment.set('client_id','');",
+									"    pm.environment.set('client_secret','');",
 									"    let username = pm.variables.get('admin_username');",
 									"    pm.environment.unset(username + '.token');",
 									"});"
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
