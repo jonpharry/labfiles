@@ -9054,10 +9054,412 @@
 			]
 		},
 		{
+			"name": "12 Branding Customization",
+			"item": [
+				{
+					"name": "#Initiate basic LDAP login mechanism",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "060381e4-f011-41f5-993e-3f89da165051",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"expect response body to exist\", function() {",
+									"   pm.response.to.have.body();",
+									"});",
+									"",
+									"$ = cheerio.load(responseBody);",
+									"let path = $('body').attr('action');",
+									"let key = 'StateId=';",
+									"let stateId = path.substr(path.indexOf(key) + key.length);",
+									"",
+									"pm.test(\"expect response body to contain attribute '\"+key.substr(0,key.length-1)+\"'\", function() {",
+									"   pm.expect(stateId).to.not.be.empty;",
+									"   pm.environment.set('state_id', stateId);",
+									"});",
+									"",
+									"pm.environment.unset('target');",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "15c64369-b5bf-4926-b57e-7a0013cd7525",
+								"type": "text/javascript",
+								"exec": [
+									"//Clean up state",
+									"pm.environment.unset('state_id');",
+									"pm.environment.unset('jsessionid');",
+									"pm.environment.unset(pm.environment.get('admin_username') + '.token');",
+									"",
+									"//Set target (must be sent to initiate login)",
+									"pm.environment.set('target', encodeURIComponent('https://'+pm.environment.get('tenantid')+'.'+pm.environment.get('urlsuffix')+'/ui/admin'));",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/authsvc/mtfim/sps/authsvc?PolicyId=urn:ibm:security:authentication:asf:basicldapuser&Target={{target}}",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"authsvc",
+								"mtfim",
+								"sps",
+								"authsvc"
+							],
+							"query": [
+								{
+									"key": "PolicyId",
+									"value": "urn:ibm:security:authentication:asf:basicldapuser"
+								},
+								{
+									"key": "Target",
+									"value": "{{target}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#Complete admin user login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "42aa44c6-450e-4bf7-b071-9c24a69fc31a",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"expect response body to exist\", function() {",
+									"   pm.response.to.have.body();",
+									"});",
+									"",
+									"let key = 'authKey: \"';",
+									"$ = cheerio.load(responseBody);",
+									"let script = $('script').text();",
+									"let start = script.indexOf(key) + key.length;",
+									"let authKey = script.substring(start, script.indexOf('\"', start));",
+									"",
+									"pm.test(\"expect response body to contain attribute '\"+key+\"'\", function() {",
+									"   pm.expect(authKey).to.not.be.empty;",
+									"});",
+									"",
+									"let username = pm.variables.get('admin_username');",
+									"pm.environment.set(username + '.token', authKey);",
+									"pm.environment.set('access_token', authKey);",
+									"",
+									"pm.environment.unset('state_id');",
+									"pm.environment.unset('jsessionid');",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c2b2c357-068c-4209-bc43-bcab7865f54a",
+								"exec": [
+									"let username = pm.variables.get('admin_username');",
+									"pm.environment.unset(username + '.token');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Cookie",
+								"value": "JSESSIONID={{jsessionid}}",
+								"disabled": true
+							},
+							{
+								"key": "Host",
+								"value": "{{hostname}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{admin_username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{admin_password}}",
+									"type": "text"
+								},
+								{
+									"key": "operation",
+									"value": "verify",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/authsvc/mtfim/sps/authsvc?StateId={{state_id}}",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"authsvc",
+								"mtfim",
+								"sps",
+								"authsvc"
+							],
+							"query": [
+								{
+									"key": "StateId",
+									"value": "{{state_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#Get Default Template Pages ZIP (/v1.0/branding/download)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f3784512-908b-44b2-bdde-c7554c9d16e2",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v1.0/branding/download?customized=false",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v1.0",
+								"branding",
+								"download"
+							],
+							"query": [
+								{
+									"key": "customized",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#Get Current Template Pages ZIP (/v1.0/branding/download)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f3784512-908b-44b2-bdde-c7554c9d16e2",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v1.0/branding/download",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v1.0",
+								"branding",
+								"download"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#Upload Template Pages ZIP (/v1.0/branding/upload)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f3784512-908b-44b2-bdde-c7554c9d16e2",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/octet-stream",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "formData",
+									"type": "file",
+									"src": ""
+								}
+							]
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v1.0/branding/upload",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v1.0",
+								"branding",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#Reset branding to default (/v1.0/branding/reset)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f3784512-908b-44b2-bdde-c7554c9d16e2",
+								"exec": [
+									"pm.test(\"expect status code to be 204\", function() {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v1.0/branding/reset",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v1.0",
+								"branding",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c7e15424-8b57-489f-a929-cd904f7605b9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb2597fe-5d0e-4bd0-a9b4-9103b9d1909a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
 			"name": "xx (Optional) Create API Client with Local Admin User",
 			"item": [
 				{
-					"name": "#Initiate login mechanism",
+					"name": "#Initiate basic LDAP login mechanism",
 					"event": [
 						{
 							"listen": "test",
