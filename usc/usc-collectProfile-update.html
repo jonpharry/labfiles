@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+  *********************************************************************
+  *   Licensed Materials - Property of IBM
+  *   (C) Copyright IBM Corp. 2016. All Rights Reserved
+  *
+  *   US Government Users Restricted Rights - Use, duplication, or
+  *   disclosure restricted by GSA ADP Schedule Contract with
+  *   IBM Corp.
+  *********************************************************************
+  -->
+<HTML>
+<HEAD>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <TITLE>Account Create</TITLE>
+  <!--
+    /authsvc/usc/account-create/collectProfile.html
+  -->
+  <LINK REL="stylesheet" TYPE="text/css" HREF="/sps/static/styles.css">
+  <LINK REL="stylesheet" TYPE="text/css" HREF="/sps/static/usc.css">
+
+  <SCRIPT TYPE="text/javascript">
+  function onLoadPage() {
+    showError();
+    setFocus();
+    setLanguage();
+  }
+
+  // Do not translate the macro ERROR_MESSAGE
+  var errorMessage = "@ERROR_MESSAGE@";
+
+  function showError() {
+    var elem = document.getElementById("errId");
+    elem.innerHTML = errorMessage;
+    if (errorMessage == "") {
+      elem.setAttribute("CLASS", "");
+    } else {
+      elem.setAttribute("CLASS", "errorMessage");
+    }
+  }
+
+  function setFocus() {
+    document.getElementById("username").focus();
+  }
+
+  var formElements = [
+    "username", "password", "passwordConfirm",
+    "language", "surname", "firstName",
+    "employeeNumber"
+  ];
+
+  var formAreas = [
+    "address"
+  ];
+
+  function clearForm() {
+    var i;
+    for (i=0; i<formElements.length; i++) {
+      document.getElementById(formElements[i]).value = "";
+    }
+    for (i=0; i<formAreas.length; i++) {
+      document.getElementById(formAreas[i]).innerHTML = "";
+    }
+    setLanguage();
+    errorMessage = "";
+    showError();
+    setFocus();
+  }
+
+  function setLanguage() {
+    document.getElementById("language").setAttribute("value", window.navigator.userLanguage || window.navigator.language);
+  }
+
+  function checkPassword() {
+    var valid = (document.getElementById("password").value.length != 0) &&
+      document.getElementById("password").value == document.getElementById("passwordConfirm").value;
+
+    var errorDiv = document.getElementById("errId");
+    var errors = (valid)? "" : "Error: Passwords do not match.";
+    errorDiv.innerHTML = errors;
+    errorDiv.setAttribute("CLASS", (errors.length==0)? "" : "errorMessage");
+  }
+</SCRIPT>
+</HEAD>
+<BODY ONLOAD="onLoadPage()">
+  <DIV CLASS="header">
+    <DIV CLASS="prodname">IBM Security Access Manager - SCIM Create User</DIV>
+    <SPAN CLASS="headerLogo"><DIV></DIV></SPAN>
+  </DIV>
+  <!-- Do not translate the macro ACTION -->
+  <FORM ID="profileForm" ACTION="@ACTION@" METHOD="post">
+    <DIV CLASS="content">
+      <DIV CLASS="contentHeader">
+        <h1 CLASS="pageTitle">Account Create</h1>
+        <DIV CLASS="instructions">Profile Information for New User</DIV>
+      </DIV>
+      <DIV CLASS="pageContent">
+        <!-- Do not translate the macro ERROR_MESSAGE -->
+        <DIV ID="errId">@ERROR_MESSAGE@</DIV>
+          <FIELDSET>
+            <LEGEND>Standard Attributes</LEGEND>
+
+            <DIV CLASS="box">
+              <!-- Do not translate the macro EMAIL -->
+              <LABEL FOR="emailAddress">Email Address</LABEL> <INPUT TYPE="text" NAME="emailAddress" ID="emailAddress" VALUE="@EMAIL@" disabled>
+            </DIV>
+            <DIV CLASS="box">
+              <!-- Do not translate the macro USERNAME -->
+              <LABEL FOR="username">User Name</LABEL> <INPUT TYPE="text" NAME="username" ID="username" VALUE="@USERNAME@">
+            </DIV>
+
+            <DIV CLASS="box">
+              <LABEL FOR="password">Password</LABEL> <INPUT TYPE="password" NAME="password" ID="password">
+            </DIV>
+            <DIV CLASS="box">
+              <LABEL FOR="passwordConfirm">Password (confirm)</LABEL> <INPUT TYPE="password" NAME="passwordConfirm" ID="passwordConfirm" ONCHANGE="checkPassword()">
+            </DIV>
+
+            <DIV CLASS="box">
+              <!-- Do not translate the macro LANGUAGE -->
+              <LABEL FOR="language">Preferred Language</LABEL> <INPUT TYPE="text" NAME="language" ID="language" VALUE="@LANGUAGE@">
+            </DIV>
+
+          </FIELDSET>
+
+          <FIELDSET>
+            <LEGEND>Name</LEGEND>
+
+            <DIV CLASS="box">
+              <!-- Do not translate the macro SURNAME -->
+              <LABEL FOR="surname">Family Name</LABEL> <INPUT TYPE="text" NAME="surname" ID="surname" VALUE="@SURNAME@">
+            </DIV>
+
+            <DIV CLASS="box">
+              <!-- Do not translate the macro FIRSTNAME -->
+              <LABEL FOR="firstName">Given Name</LABEL> <INPUT TYPE="text" NAME="firstName" ID="firstName" VALUE="@FIRSTNAME@">
+            </DIV>
+
+          </FIELDSET>
+
+          <FIELDSET>
+            <LEGEND>Enterprise Attributes</LEGEND>
+
+            <DIV CLASS="box">
+              <!-- Do not translate the macro EMPLOYEENUMBER -->
+              <LABEL FOR="employeeNumber">Employee Number</LABEL> <INPUT TYPE="text" NAME="employeeNumber" ID="employeeNumber" VALUE="@EMPLOYEENUMBER@">
+            </DIV>
+          </FIELDSET>
+
+          <INPUT TYPE="hidden" NAME="operation" VALUE="verify">
+      </DIV>
+    </DIV>
+    <DIV CLASS="content footer">
+      <BUTTON TYPE="submit" ID="submitButton">Submit</BUTTON>
+      <BUTTON TYPE="reset" ONCLICK="clearForm()">Reset</BUTTON>
+    </DIV>
+  </FORM>
+</BODY>
+</HTML>

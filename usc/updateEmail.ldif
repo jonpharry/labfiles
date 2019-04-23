@@ -1,0 +1,10 @@
+dn: uid=emily,dc=ibm,dc=com
+changetype: modify
+add: mail
+mail: emily@iamlab.ibm.com
+
+dn: uid=chuck,dc=ibm,dc=com
+changetype: modify
+add: mail
+mail: chuck@iamlab.ibm.com
+
