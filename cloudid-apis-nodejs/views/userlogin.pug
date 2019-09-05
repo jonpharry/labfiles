@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  body
+    .container
+      .header
+        .header-title
+          h2 IBM Demo Bank
+  form(method='POST' action='/userlogin')
+      .panel.mtm
+        .panel-header
+          center
+            h3 Login
+        |       
+        .panel-body
+          .login-form
+            .control-box
+              span Login:
+              |             
+              input(type='username' id='username' placeholder='username' name='username')
+               |           
+            .control-box
+              span Password:
+              |             
+              input(type='password' id='password' placeholder='password' name='password')
+        |       
+        .panel-footer
+          center
+            i.fa.fa-sign-in(aria-hidden='true')
+            |           
+            button.btn.btn-primary(type='submit') Login

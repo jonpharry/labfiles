@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  body
+    .container
+      .header
+        .header-title
+          h2 One Time Password
+  form(method='POST' action='/profile')
+      .panel.mtm
+        .panel-header
+          center
+            h3 Enter One Time Password, check your #{method}
+        |       
+        .panel-body
+          .login-form
+            .control-box
+              span #{hint} -
+              |             
+              input(type='text' id='otp' placeholder='OTP' name='otp')
+            |           
+        .panel-footer
+          center
+            i.fa.fa-sign-in(aria-hidden='true')
+            |           
+            button.btn.btn-primary(type='submit') Submit

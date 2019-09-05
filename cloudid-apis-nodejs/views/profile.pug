@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  body
+    .container
+      .header
+        .header-title
+          h2 #{title}
+    .panel.mtm
+      .panel-header
+        center
+          h3 User Details
+        |       
+        .panel-body
+          .login-form
+            .control-box
+              span Username :
+                   |             
+              span #{username}
+            |
+            .control-box                     
+              span EMail Address :
+              |             
+              span #{email}
+            |
+            .control-box                                 
+              span Mobile Number :
+              |             
+              span #{mobile}
+            |                  

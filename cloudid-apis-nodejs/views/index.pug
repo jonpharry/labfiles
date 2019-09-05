@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  body
+    .container
+      .header
+        .header-title
+          h2 Authentication as a service demo application
+    .panel.mtm
+      .panel-header
+        center
+          h3 Links
+        |
+        .panel-body
+          .login-form
+            .control-box
+              span User Login Link :
+              |
+              span
+                a(href='/userlogin') http://localhost:3000/userlogin
+              |

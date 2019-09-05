@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  body
+    .container
+      .header
+        .header-title
+          h2 #{title}
+    .panel.mtm
+      .panel-header
+        center
+          h3 Welcome #{displayName}
+        |       
+        .panel-body
+          .login-form
+            .control-box
+              span Current Account balance:
+              |             
+              span #{balance}
+            |                     
+    - var url = 'profile?user='+userid;
+    .top-right
+      a(href='/' + url) Profile
