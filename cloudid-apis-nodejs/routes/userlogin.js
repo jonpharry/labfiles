@@ -1,8 +1,6 @@
 const express = require('express');
 
-const https = require('https');
 const request = require('request');
-const users_data = '';
 const dotenv = require('dotenv');
 const oauth = require('../oauth.js');
 
@@ -33,7 +31,7 @@ function passwordLogin(access_token, uid, pw) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + access_token
       }
-    }, function(error, response, body) {
+    }, function(error, _response, body) {
       if (error) {
         reject(error);
       } else {
@@ -44,13 +42,13 @@ function passwordLogin(access_token, uid, pw) {
   });
 }
 
-router.get('/', function(req, res, next) {
+router.get('/', function(_req, res, _next) {
   res.render('userlogin', {
     title: 'Login'
   });
 });
 
-router.post('/', function(req, res, next) {
+router.post('/', function(req, res, _next) {
   if (req.body.username && req.body.password) {
     oauth.getAccessToken().then((tokenData) => {
       passwordLogin(tokenData.access_token, req.body.username, req.body.password).then((body) => {

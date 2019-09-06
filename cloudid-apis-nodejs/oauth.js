@@ -1,8 +1,6 @@
 const OAuthContext = require('ibm-verify-sdk').OAuthContext;
-const AuthenticatorContext = require('ibm-verify-sdk').AuthenticatorContext;
+//const AuthenticatorContext = require('ibm-verify-sdk').AuthenticatorContext;
 
-const https = require('https');
-const request = require('request');
 const fs = require('fs');
 const dotenv = require('dotenv');
 

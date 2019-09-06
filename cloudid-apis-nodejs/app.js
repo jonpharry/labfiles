@@ -3,12 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const OAuthContext = require('ibm-verify-sdk').OAuthContext;
-const AuthenticatorContext = require('ibm-verify-sdk').AuthenticatorContext;
 
-const https = require('https');
-const request = require('request');
-const fs = require('fs');
 const dotenv = require('dotenv');
 const session = require('express-session');
 
@@ -37,8 +32,6 @@ var apiClientConfig = {
   flowType: 'client_credentials',
   scope: 'none'
 };
-
-var authClient = new OAuthContext(apiClientConfig);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

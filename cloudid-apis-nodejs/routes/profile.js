@@ -1,5 +1,4 @@
 const express = require('express');
-const https = require('https');
 const request = require('request');
 const dotenv = require('dotenv');
 const oauth = require('../oauth.js');
@@ -70,7 +69,7 @@ function generateOTP(access_token, login_method, userData) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + access_token
       }
-    }, function(error, response, body) {
+    }, function(error, _response, body) {
       if (error) {
         reject(error);
       } else {
@@ -81,7 +80,7 @@ function generateOTP(access_token, login_method, userData) {
   });
 }
 
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res, _next) {
 
   if (!req.session.authenticated) {
     res.redirect('/userlogin');
@@ -163,7 +162,7 @@ router.get('/', function(req, res, next) {
 });
 
 
-router.post('/', function(req, res, next) {
+router.post('/', function(req, res, _next) {
   console.log("START profile POST Function");
 
   oauth.getAccessToken().then((tokenData) => {
