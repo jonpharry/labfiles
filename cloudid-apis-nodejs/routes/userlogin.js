@@ -9,11 +9,57 @@ var router = express.Router();
 
 //Required Endpoints
 var passwordEndpoint = '/v2.0/Users/authentication';
+var qrEndpoint = '/v2.0/factors/qr/authenticate';
 
 // load contents of .env into process.env
 dotenv.config();
 
 var tenant_url = process.env.TENANT_URL;
+var reg_id = process.env.VERIFY_REG_ID;
+
+//Function to initiate QRLogin
+function initiateQRLogin(access_token, regId) {
+  return new Promise(function(resolve, reject) {
+    request({
+      url: tenant_url + qrEndpoint + '?profileId=' + regId,
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + access_token
+      }
+    }, function(error, _response, body) {
+      if (error) {
+        reject(error);
+      } else {
+        console.log(body);
+        resolve(JSON.parse(body));
+      }
+    });
+  });
+}
+
+//Function to validate QRLogin
+function validateQRLogin(access_token, qrInitResponse) {
+  return new Promise(function(resolve, reject) {
+    qr_id = qrInitResponse.id;
+    qr_dsi = qrInitResponse.dsi;
+    request({
+      url: tenant_url + qrEndpoint + '/' + qr_id + '?dsi=' + qr_dsi,
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + access_token
+      }
+    }, function(error, _response, body) {
+      if (error) {
+        reject(error);
+      } else {
+        console.log(body);
+        resolve(JSON.parse(body));
+      }
+    });
+  });
+}
 
 //Function to check user password and get userID
 function passwordLogin(access_token, uid, pw) {
@@ -42,9 +88,15 @@ function passwordLogin(access_token, uid, pw) {
   });
 }
 
-router.get('/', function(_req, res, _next) {
-  res.render('userlogin', {
-    title: 'Login'
+router.get('/', function(req, res, _next) {
+  oauth.getAccessToken().then((tokenData) => {
+    initiateQRLogin(tokenData.access_token, reg_id).then((qrTxn) => {
+      req.session.qrtxn = qrTxn;
+      res.render('userlogin', {
+        title: 'Login',
+        qrCode: qrTxn.qrCode
+      });
+    });
   });
 });
 
@@ -78,11 +130,16 @@ router.post('/', function(req, res, _next) {
         });
     });
   } else {
-    console.log("Username and password should be provided");
-    res.render('error', {
-      message: "Both username password should be provided, try again",
-      status: "400"
+    oauth.getAccessToken().then((tokenData) => {
+      validateQRLogin(tokenData.access_token, req.session.qrtxn).then((response) => {
+        console.log("Username and password should be provided");
+        res.render('error', {
+          message: "Both username password should be provided, try again",
+          status: "400"
+        });
+      });
     });
+
   }
 });
 
