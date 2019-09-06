@@ -17,6 +17,7 @@ const users = require('./routes/userlogin');
 const userlogin = require('./routes/userlogin');
 const userhome = require('./routes/userhome');
 const profile = require('./routes/profile');
+const oauth = require('./oauth.js');
 
 const app = express();
 
@@ -73,38 +74,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-//Retrieve access_token from the file, access_token.json
-var storedToken = null;
-try {storedToken = fs.readFileSync('access_token.json')} catch {};
+oauth.getAccessToken();
 
-if (storedToken != null) {
-  console.log("Loaded token : " + storedToken);
-token = JSON.parse(storedToken);
-authClient.introspectToken(token).then(r => {
-  var active = r.response.active == true;
-  if (!active) {
-    console.log("Token expired; getting new token");
-    authClient.getToken('foo').then(generated_token => {
-      console.log("response : " + JSON.stringify(generated_token));
-      //Once a new access token is generated, store it in the repository
-
-      fs.writeFile('access_token.json', JSON.stringify(generated_token), function(err, _result) {
-        if (err) console.log('error', err);
-      });
-    });
-  } else { console.log("Token is valid")}
-})
-} else {
-  console.log("Getting new token");
-  authClient.getToken('foo').then(generated_token => {
-    console.log("response : " + JSON.stringify(generated_token));
-    //Once a new access token is generated, store it in the repository
-
-    fs.writeFile('access_token.json', JSON.stringify(generated_token), function(err, _result) {
-      if (err) console.log('error', err);
-    });
-  });
-}
 
 
 module.exports = app;
