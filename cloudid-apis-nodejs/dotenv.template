@@ -1,3 +1,4 @@
 TENANT_URL=https://xxxxx.ice.ibmcloud.com
 CLIENT_ID=
 CLIENT_SECRET=
+SESSION_SECRET=changeme

@@ -10,18 +10,26 @@ const https = require('https');
 const request = require('request');
 const fs = require('fs');
 const dotenv = require('dotenv');
+const session = require('express-session');
 
 const index = require('./routes/index');
 const users = require('./routes/userlogin');
 const userlogin = require('./routes/userlogin');
+const userhome = require('./routes/userhome');
 const profile = require('./routes/profile');
 
-var app = express();
+const app = express();
 
 // load contents of .env into process.env
 dotenv.config();
 
-let apiClientConfig = {
+app.use(session({
+	secret: process.env.SESSION_SECRET,
+	resave: false,
+	saveUninitialized: true
+}));
+
+var apiClientConfig = {
   tenantUrl: process.env.TENANT_URL,
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
@@ -29,7 +37,7 @@ let apiClientConfig = {
   scope: 'none'
 };
 
-let authClient = new OAuthContext(apiClientConfig);
+var authClient = new OAuthContext(apiClientConfig);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -46,6 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/userlogin', userlogin);
+app.use('/userhome', userhome);
 app.use('/profile', profile);
 
 // catch 404 and forward to error handler

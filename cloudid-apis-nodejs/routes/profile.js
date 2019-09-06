@@ -82,83 +82,88 @@ function generateOTP(access_token, login_method, userData) {
 }
 
 router.get('/', function(req, res, next) {
-  console.log("START profile GET Function");
-  if (req.query) {
-    var user = req.query.user;
 
-    //Retrieve access_token from the file, access_token.json
-    var storedToken = fs.readFileSync('access_token.json');
-    var token = JSON.parse(storedToken)["access_token"];
-    console.log("Stored Access Token : " + token)
-
-    access_token = token;
-
-    getUser(access_token, user).then(userJson => {
-      username = userJson.userName;
-      mobile = userJson.phoneNumbers[0].value;
-      email = userJson.emails[0].value;
-      method = "mobile";
-
-      if (method == "mobile") {
-        var initializeOTPPromise = generateOTP(access_token, method, mobile);
-        initializeOTPPromise.then(function(body) {
-            txnID = body['id'];
-            hint = body['correlation'];
-            if (!(txnID)) {
-              res.render('error', {
-                message: "Something went wrong with OTP generation, please re run the flow",
-                status: "400"
-              });
-            } else {
-              res.render('otp', {
-                title: 'Login with the One-Time password',
-                hint: body['correlation'],
-                method: 'mobile'
-              });
-            }
-          },
-          function(err) {
-            res.render('error', {
-              message: "Something went wrong with OTP generation",
-              status: "400"
-            });
-            console.log(err);
-          });
-      } else {
-        var initializeOTPPromise = generateOTP(access_token, method, email);
-        initializeOTPPromise.then(function(body) {
-            txnID = body['id'];
-            hint = body['correlation'];
-            if (!(txnID)) {
-              res.render('error', {
-                message: "Something went wrong with OTP generation, please re run the flow",
-                status: "400"
-              });
-            } else {
-              res.render('otp', {
-                title: 'Login with the One-Time password',
-                hint: body['correlation'],
-                method: 'email'
-              });
-            }
-          },
-          function(err) {
-            res.render('error', {
-              message: "Something went wrong with OTP generation",
-              status: "400"
-            });
-            console.log(err);
-          });
-      }
-    });
+  if (!req.session.authenticated) {
+    res.redirect('/userlogin');
   } else {
-    console.log("Unable to retrieve user from the query string");
-    res.render('error', {
-      message: "Unable to retrieve user",
-      status: "404"
-    });
+    console.log("START profile GET Function");
+    if (req.query) {
+      var user = req.query.user;
+
+      //Retrieve access_token from the file, access_token.json
+      var storedToken = fs.readFileSync('access_token.json');
+      var token = JSON.parse(storedToken)["access_token"];
+      console.log("Stored Access Token : " + token)
+
+      access_token = token;
+
+      getUser(access_token, user).then(userJson => {
+        username = userJson.userName;
+        mobile = userJson.phoneNumbers[0].value;
+        email = userJson.emails[0].value;
+        method = "mobile";
+
+        if (method == "mobile") {
+          var initializeOTPPromise = generateOTP(access_token, method, mobile);
+          initializeOTPPromise.then(function(body) {
+              txnID = body['id'];
+              hint = body['correlation'];
+              if (!(txnID)) {
+                res.render('error', {
+                  message: "Something went wrong with OTP generation, please re run the flow",
+                  status: "400"
+                });
+              } else {
+                res.render('otp', {
+                  title: 'Login with the One-Time password',
+                  hint: body['correlation'],
+                  method: 'mobile'
+                });
+              }
+            },
+            function(err) {
+              res.render('error', {
+                message: "Something went wrong with OTP generation",
+                status: "400"
+              });
+              console.log(err);
+            });
+        } else {
+          var initializeOTPPromise = generateOTP(access_token, method, email);
+          initializeOTPPromise.then(function(body) {
+              txnID = body['id'];
+              hint = body['correlation'];
+              if (!(txnID)) {
+                res.render('error', {
+                  message: "Something went wrong with OTP generation, please re run the flow",
+                  status: "400"
+                });
+              } else {
+                res.render('otp', {
+                  title: 'Login with the One-Time password',
+                  hint: body['correlation'],
+                  method: 'email'
+                });
+              }
+            },
+            function(err) {
+              res.render('error', {
+                message: "Something went wrong with OTP generation",
+                status: "400"
+              });
+              console.log(err);
+            });
+        }
+      });
+    } else {
+      console.log("Unable to retrieve user from the query string");
+      res.render('error', {
+        message: "Unable to retrieve user",
+        status: "404"
+      });
+    }
+    console.log("END profile GET Function");
   }
-  console.log("END profile GET Function");
 });
 
 

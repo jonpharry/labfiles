@@ -5,13 +5,8 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   console.log("Display index page");
   res.render('index', {
-   title: 'Express'
+   title: 'CI API Demo'
   });
 });
 
-router.get('/userlogin', function(req, res, next) {
-  res.render('userlogin', {
-    title: 'User Login'
-  });
-});
 module.exports = router;

@@ -63,20 +63,21 @@ router.post('/', function(req, res, next) {
 
     var initializeLoginPromise = passwordLogin(access_token, req.body.username, req.body.password);
     initializeLoginPromise.then(function(body) {
-        var userId = body.id;
-        var displayName = body.displayName;
-        if (!(userId)) {
+        req.session.userId = body.id;
+        if (!(req.session.userId)) {
           res.render('error', {
             message: "Something went wrong",
             status: "400"
           });
         } else {
-          res.render('bank', {
-            title: 'Bank Operation',
-            displayName: displayName,
-            balance: '100',
-            userid: userId
-          });
+          req.session.authenticated=true
+          req.session.username = body.userName;
+          if (body.displayName) {
+            req.session.displayName = body.displayName;
+          } else {
+          req.session.displayName = body.userName;
+          }
+          res.redirect('/userhome');
         }
       },
       function(err) {
