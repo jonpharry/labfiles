@@ -10,12 +10,34 @@ var router = express.Router();
 //Required Endpoints
 var passwordEndpoint = '/v2.0/Users/authentication';
 var qrEndpoint = '/v2.0/factors/qr/authenticate';
+var userEndpoint = '/v2.0/Users';
 
 // load contents of .env into process.env
 dotenv.config();
 
 var tenant_url = process.env.TENANT_URL;
 var reg_id = process.env.VERIFY_REG_ID;
+
+//Function to lookup user from userID
+function getUser(access_token, userid) {
+  return new Promise(function(resolve, reject) {
+    request({
+      url: tenant_url + userEndpoint + '/' + userid,
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + access_token
+      }
+    }, function(error, _response, body) {
+      if (error) {
+        reject(error);
+      } else {
+        console.log(body);
+        resolve(JSON.parse(body));
+      }
+    });
+  });
+}
 
 //Function to initiate QRLogin
 function initiateQRLogin(access_token, regId) {
@@ -100,6 +122,38 @@ router.get('/', function(req, res, _next) {
   });
 });
 
+router.get('/check', function(req, res, _next) {
+  console.log("Authenticated: " + req.session.authenticated);
+  oauth.getAccessToken().then((tokenData) => {
+    validateQRLogin(tokenData.access_token, req.session.qrtxn).then((body) => {
+      if (body.state) {
+        if (body.state == "SUCCESS") {
+          req.session.authenticated = true;
+          getUser(tokenData.access_token, body.userId).then((user) => {
+            req.session.username = user.userName;
+            if (user.displayName) {
+              req.session.displayName = user.displayName;
+            } else {
+              req.session.displayName = user.userName;
+            }
+            res.json({
+              "state": body.state
+            });
+          });
+        } else {
+          res.json({
+            "state": body.state
+          });
+        }
+      } else {
+        res.json({
+          "state": "error"
+        });
+      }
+    });
+  });
+});
+
 router.post('/', function(req, res, _next) {
   if (req.body.username && req.body.password) {
     oauth.getAccessToken().then((tokenData) => {
@@ -130,16 +184,11 @@ router.post('/', function(req, res, _next) {
         });
     });
   } else {
-    oauth.getAccessToken().then((tokenData) => {
-      validateQRLogin(tokenData.access_token, req.session.qrtxn).then((response) => {
-        console.log("Username and password should be provided");
-        res.render('error', {
-          message: "Both username password should be provided, try again",
-          status: "400"
-        });
-      });
+    console.log("Username and password should be provided");
+    res.render('error', {
+      message: "Both username password should be provided, try again",
+      status: "400"
     });
-
   }
 });
 
