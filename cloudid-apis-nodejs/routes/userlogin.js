@@ -129,15 +129,20 @@ router.get('/check', function(req, res, _next) {
       if (body.state) {
         if (body.state == "SUCCESS") {
           req.session.authenticated = true;
-          getUser(tokenData.access_token, body.userId).then((user) => {
+          req.session.userId = body.userId;
+          getUser(tokenData.access_token, req.session.userId).then((user) => {
             req.session.username = user.userName;
             if (user.displayName) {
               req.session.displayName = user.displayName;
             } else {
               req.session.displayName = user.userName;
             }
+            if (!req.session.afterlogin) {
+              req.session.afterlogin = "userhome";
+            }
             res.json({
-              "state": body.state
+              "state": body.state,
+              "next": req.session.afterlogin
             });
           });
         } else {
@@ -172,7 +177,11 @@ router.post('/', function(req, res, _next) {
             } else {
               req.session.displayName = body.userName;
             }
-            res.redirect('/userhome');
+            if (req.session.afterlogin) {
+              res.redirect('/' + req.session.afterlogin);
+            } else {
+              res.redirect('/userhome');
+            }
           }
         },
         function(err) {

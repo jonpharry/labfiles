@@ -10,6 +10,7 @@ const session = require('express-session');
 const index = require('./routes/index');
 const users = require('./routes/userlogin');
 const userlogin = require('./routes/userlogin');
+const otp = require('./routes/otp');
 const userhome = require('./routes/userhome');
 const profile = require('./routes/profile');
 const oauth = require('./oauth.js');
@@ -48,6 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/userlogin', userlogin);
+app.use('/otp', otp);
 app.use('/userhome', userhome);
 app.use('/profile', profile);
 
@@ -66,9 +68,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-oauth.getAccessToken();
-
-
 
 module.exports = app;

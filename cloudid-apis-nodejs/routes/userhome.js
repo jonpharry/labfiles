@@ -6,6 +6,7 @@ var router = express.Router();
 router.get('/', function(req, res, _next) {
 
   if (!req.session.authenticated) {
+    req.session.afterlogin="userhome";
     res.redirect('/userlogin');
   } else {
     res.render('bank', {

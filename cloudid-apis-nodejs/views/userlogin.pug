@@ -14,7 +14,7 @@ block content
                   setTimeout(startPolling, 1000);
                 } else {
                   // we must have an answer - get the browser moving again
-                  window.location.href = "/userhome";
+                  window.location.href = "/" + jsonResponse.next;
                 }						
             } else {
               // Error
