@@ -10,9 +10,21 @@ ul {
   list-style-type: none;
 }
 
-.container {
-  width: 900px;
-  margin: auto;
+.panelqr {
+  border-radius: 15px;
+  background-color: white;
+  width: 340px;
+  height: 400px;
+  float: right;
+  margin-top: 50px;
+}
+
+.panellogin {
+  margin-right: 350px;
+  border-radius: 15px;
+  background-color: white;
+  margin-top: 50px;
+  height: 400px;
 }
 
 .header {
@@ -67,7 +79,7 @@ ul {
 }
 
 .login-form {
-  width: 80%;
+  width: 90%;
   margin: 20px auto;
 }
 

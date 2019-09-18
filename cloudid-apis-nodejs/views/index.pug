@@ -1,21 +1,20 @@
 extends layout
 
 block content
-  body
-    .container
-      .header
-        .header-title
-          h2 Authentication as a service demo application
-    .panel.mtm
-      .panel-header
-        center
-          h3 Links
-        |
-        .panel-body
-          .login-form
-            .control-box
-              span User Homepage :
-              |
-              span
-                a(href='/userhome') http://localhost:3000/userhome
-              |
+  .container
+    .header
+      .header-title
+        h2 Authentication as a service demo application
+  .panel
+    .panel-header
+      center
+        h3 Links
+      |
+      .panel-body
+        .login-form
+          .control-box
+            span User Homepage :
+            |
+            span
+              a(href='/userhome') http://localhost:3000/userhome
+            |

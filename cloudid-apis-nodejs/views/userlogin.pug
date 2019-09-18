@@ -1,8 +1,7 @@
 extends layout
 
 block content
-  head
-    script(type="text/javascript").
+  script(type="text/javascript").
       function processRequest() {
         if(req.readyState == 4) {
           if(req.status == 200) {
@@ -36,21 +35,21 @@ block content
        
        startPolling()
        
-  body
-    .container
-      .header
+  .container.one
+     .header
         .header-title
           h2 IBM Demo Bank
-  .panel.mtm
-     .panel-header
-        center
-          h3 QR Code Login
-     .panel-body
-        center
-          img(src='data:image/png;base64,'+qrCode alt='qrcode')
+  .container.two(height='500px')
+     .panelqr
+       .panel-header
+          center
+            h3 QR Code Login
+       .panel-body
+          center
+            img(src='data:image/png;base64,'+qrCode alt='qrcode')
                       
   form(method='POST' action='/userlogin')
-      .panel.mtm
+      .panellogin
         .panel-header
           center
             h3 Username and Password Login
