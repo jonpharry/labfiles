@@ -7,9 +7,7 @@ const ci = require('../cloudidentity.js');
 var router = express.Router();
 
 //Required Endpoints
-var userEndpoint = '/v2.0/Users';
 var otpVerifyEndpoint = '/v1.0/authnmethods/emailotp/transient/verification';
-var otpVerifyEndpointSMS = '/v1.0/authnmethods/smsotp/transient/verification';
 
 // load contents of .env into process.env
 dotenv.config();
@@ -21,7 +19,6 @@ var txnID = '';
 var mobile = '';
 var email = '';
 var method = '';
-var username = '';
 
 router.get('/', function(req, res, _next) {
 
@@ -36,7 +33,6 @@ router.get('/', function(req, res, _next) {
       oauth.getAccessToken().then((tokenData) => {
         var access_token = tokenData.access_token;
         ci.getUser(access_token, userId).then(userJson => {
-          username = userJson.userName;
           mobile = userJson.phoneNumbers[0].value;
           email = userJson.emails[0].value;
 
