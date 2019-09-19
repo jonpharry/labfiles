@@ -2,7 +2,7 @@ extends layout
 
 block content
   script(type="text/javascript").
-      function processRequest() {
+      function processResponse() {
         if(req.readyState == 4) {
           if(req.status == 200) {
             var jsonResponse = JSON.parse(req.responseText);
@@ -16,17 +16,19 @@ block content
                   window.location.href = "/" + jsonResponse.next;
                 }						
             } else {
-              // Error
+              // Error handling for invalid response
             }
            } else {
               // Error handling for non-200 response
            }
+         } else {
+              // Error handling for unexpected readyState
          }
        }
 
        function startPolling() {
         req = new XMLHttpRequest();
-        req.onreadystatechange = processRequest;
+        req.onreadystatechange = processResponse;
         req.open("GET", "/userlogin/check", true);
         req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         req.setRequestHeader("Accept", "application/json;charset=UTF-8");

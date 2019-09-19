@@ -2,8 +2,8 @@ const express = require('express');
 const request = require('request');
 const dotenv = require('dotenv');
 const oauth = require('../oauth.js');
+const ci = require('../cloudidentity.js');
 
-var app = express();
 var router = express.Router();
 
 //Required Endpoints
@@ -23,63 +23,6 @@ var email = '';
 var method = '';
 var username = '';
 
-//Function to lookup user from userID
-function getUser(access_token, userid) {
-  return new Promise(function(resolve, reject) {
-    request({
-      url: tenant_url + userEndpoint + '/' + userid,
-      method: "GET",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + access_token
-      }
-    }, function(error, _response, body) {
-      if (error) {
-        reject(error);
-      } else {
-        console.log(body);
-        resolve(JSON.parse(body));
-      }
-    });
-  });
-}
-
-//Function to generate one time password
-function generateOTP(access_token, login_method, userData) {
-  return new Promise(function(resolve, reject) {
-    var otpData;
-    var otpEndpoint;
-    if (login_method == "email") {
-      otpData = {
-        "otpDeliveryEmailAddress": userData
-      }
-      otpEndpoint = otpVerifyEndpoint;
-    } else {
-      otpData = {
-        "otpDeliveryMobileNumber": userData
-      }
-      otpEndpoint = otpVerifyEndpointSMS;
-    }
-    request({
-      url: tenant_url + otpEndpoint,
-      method: "POST",
-      body: otpData,
-      json: true,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + access_token
-      }
-    }, function(error, _response, body) {
-      if (error) {
-        reject(error);
-      } else {
-        console.log(body);
-        resolve(body);
-      }
-    });
-  });
-}
-
 router.get('/', function(req, res, _next) {
 
   if (!req.session.authenticated) {
@@ -92,7 +35,7 @@ router.get('/', function(req, res, _next) {
 
       oauth.getAccessToken().then((tokenData) => {
         var access_token = tokenData.access_token;
-        getUser(access_token, userId).then(userJson => {
+        ci.getUser(access_token, userId).then(userJson => {
           username = userJson.userName;
           mobile = userJson.phoneNumbers[0].value;
           email = userJson.emails[0].value;
@@ -104,7 +47,7 @@ router.get('/', function(req, res, _next) {
           }
 
           if (method == "mobile") {
-            var initializeOTPPromise = generateOTP(access_token, method, mobile);
+            var initializeOTPPromise = ci.generateOTP(access_token, method, mobile);
             initializeOTPPromise.then(function(body) {
                 txnID = body['id'];
                 hint = body['correlation'];
@@ -129,7 +72,7 @@ router.get('/', function(req, res, _next) {
                 console.log(err);
               });
           } else {
-            var initializeOTPPromise = generateOTP(access_token, method, email);
+            var initializeOTPPromise = ci.generateOTP(access_token, method, email);
             initializeOTPPromise.then(function(body) {
                 txnID = body['id'];
                 hint = body['correlation'];
