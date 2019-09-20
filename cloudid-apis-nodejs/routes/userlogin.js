@@ -79,6 +79,7 @@ router.post('/', function(req, res, _next) {
             if (req.session.afterlogin) {
               var url = req.session.afterlogin;
               delete req.session.afterlogin;
+              delete req.session.qrtxn;
               res.redirect('/' + url);
             } else {
               res.redirect('/userhome');

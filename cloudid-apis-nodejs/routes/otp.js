@@ -61,8 +61,12 @@ router.post('/', function(req, res, _next) {
         if (body.messageDescription) {
           if (body.messageDescription.search("successful") != -1) {
             req.session.otpcomplete = true;
+            delete req.session.otpInitResponse
             if (req.session.afterotp) {
-              res.redirect('/' + req.session.afterotp);
+              var url = req.session.afterotp;
+              delete req.session.afterotp;
+              res.redirect('/' + url);
+
             } else {
               res.render('error', {
                 message: "No return URL available",

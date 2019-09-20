@@ -12,6 +12,7 @@ const userlogin = require('./routes/userlogin');
 const otp = require('./routes/otp');
 const userhome = require('./routes/userhome');
 const profile = require('./routes/profile');
+const logout = require('./routes/logout');
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use('/userlogin', userlogin);
 app.use('/otp', otp);
 app.use('/userhome', userhome);
 app.use('/profile', profile);
+app.use('/logout', logout);
 
 // catch 404 and forward to error handler
 app.use(function(_req, _res, next) {

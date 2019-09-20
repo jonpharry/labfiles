@@ -17,6 +17,7 @@ block content
               |             
               span #{balance}
             |                     
-    - var url = 'profile?user='+userid;
     .top-right
-      a(href='/' + url) Profile
+      a(href='/profile?user='+userid) Profile
+      |  
+      a(href='/logout') Logout
