@@ -4,8 +4,8 @@ const request = require('request');
 
 //Required Endpoints
 var userEndpoint = '/v2.0/Users';
-var otpVerifyEndpoint = '/v1.0/authnmethods/emailotp/transient/verification';
-var otpVerifyEndpointSMS = '/v1.0/authnmethods/smsotp/transient/verification';
+var otpEndpointEmail = '/v1.0/authnmethods/emailotp/transient/verification';
+var otpEndpointSMS = '/v1.0/authnmethods/smsotp/transient/verification';
 var passwordEndpoint = '/v2.0/Users/authentication';
 var qrEndpoint = '/v2.0/factors/qr/authenticate';
 
@@ -15,14 +15,15 @@ dotenv.config();
 var tenant_url = process.env.TENANT_URL;
 
 //Function to lookup user from userID
-function getUser(access_token, userid) {
+function getUser(userid) {
   return new Promise(function(resolve, reject) {
+            oauth.getAccessToken().then(tokenData => {
     request({
       url: tenant_url + userEndpoint + '/' + userid,
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + access_token
+        'Authorization': 'Bearer ' + tokenData.access_token
       }
     }, function(error, _response, body) {
       if (error) {
@@ -33,23 +34,25 @@ function getUser(access_token, userid) {
       }
     });
   });
+  });
 }
 
 //Function to generate one time password
-function generateOTP(access_token, login_method, userData) {
+function generateOTP(login_method, userData) {
   return new Promise(function(resolve, reject) {
+            oauth.getAccessToken().then(tokenData => {
     var otpData;
     var otpEndpoint;
     if (login_method == "email") {
       otpData = {
         "otpDeliveryEmailAddress": userData
       }
-      otpEndpoint = otpVerifyEndpoint;
+      otpEndpoint = otpEndpointEmail;
     } else {
       otpData = {
         "otpDeliveryMobileNumber": userData
       }
-      otpEndpoint = otpVerifyEndpointSMS;
+      otpEndpoint = otpEndpointSMS;
     }
     request({
       url: tenant_url + otpEndpoint,
@@ -58,7 +61,7 @@ function generateOTP(access_token, login_method, userData) {
       json: true,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + access_token
+        'Authorization': 'Bearer ' + tokenData.access_token
       }
     }, function(error, _response, body) {
       if (error) {
@@ -69,17 +72,29 @@ function generateOTP(access_token, login_method, userData) {
       }
     });
   });
+});
 }
 
-//Function to initiate QRLogin
-function initiateQRLogin(access_token, regId) {
+//Function to validate OTP
+function validateOTP(otpInitResponse, otp) {
   return new Promise(function(resolve, reject) {
+            oauth.getAccessToken().then(tokenData => {
+    var postData = {
+      "otp": otp
+    }
+    var otpEndpoint;
+    if (otpInitResponse.methodType == "smsotp") {
+      otpEndpoint = otpEndpointSMS;
+    } else {
+      otpEndpoint = otpEndpointEmail;
+    }
     request({
-      url: tenant_url + qrEndpoint + '?profileId=' + regId,
-      method: "GET",
+      url: tenant_url + otpEndpoint + '/' + otpInitResponse.id,
+      method: "POST",
+      body: JSON.stringify(postData),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + access_token
+        'Authorization': 'Bearer ' + tokenData.access_token
       }
     }, function(error, _response, body) {
       if (error) {
@@ -90,11 +105,36 @@ function initiateQRLogin(access_token, regId) {
       }
     });
   });
+});
+}
+
+//Function to initiate QRLogin
+function initiateQRLogin(regId) {
+  return new Promise(function(resolve, reject) {
+            oauth.getAccessToken().then(tokenData => {
+    request({
+      url: tenant_url + qrEndpoint + '?profileId=' + regId,
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + tokenData.access_token
+      }
+    }, function(error, _response, body) {
+      if (error) {
+        reject(error);
+      } else {
+        console.log(body);
+        resolve(JSON.parse(body));
+      }
+    });
+  });
+});
 }
 
 //Function to validate QRLogin
-function validateQRLogin(access_token, qrInitResponse) {
+function validateQRLogin(qrInitResponse) {
   return new Promise(function(resolve, reject) {
+        oauth.getAccessToken().then(tokenData => {
     qr_id = qrInitResponse.id;
     qr_dsi = qrInitResponse.dsi;
     request({
@@ -102,7 +142,7 @@ function validateQRLogin(access_token, qrInitResponse) {
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + access_token
+        'Authorization': 'Bearer ' + tokenData.access_token
       }
     }, function(error, _response, body) {
       if (error) {
@@ -113,11 +153,13 @@ function validateQRLogin(access_token, qrInitResponse) {
       }
     });
   });
+    });
 }
 
-//Function to check user password and get userID
-function passwordLogin(access_token, uid, pw) {
+//Function to check user password and get user
+function passwordLogin(uid, pw) {
   return new Promise(function(resolve, reject) {
+    oauth.getAccessToken().then(tokenData => {
     var postData = {
       "userName": uid,
       "password": pw,
@@ -129,7 +171,7 @@ function passwordLogin(access_token, uid, pw) {
       body: JSON.stringify(postData),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + access_token
+        'Authorization': 'Bearer ' + tokenData.access_token
       }
     }, function(error, _response, body) {
       if (error) {
@@ -140,11 +182,13 @@ function passwordLogin(access_token, uid, pw) {
       }
     });
   });
+  });
 }
 
 module.exports = {
   getUser: getUser,
   generateOTP: generateOTP,
+  validateOTP: validateOTP,
   initiateQRLogin: initiateQRLogin,
   validateQRLogin: validateQRLogin,
   passwordLogin: passwordLogin

@@ -1,13 +1,7 @@
 const express = require('express');
-const dotenv = require('dotenv');
-const oauth = require('../oauth.js');
 const ci = require('../cloudidentity.js');
 
-var app = express();
 var router = express.Router();
-
-// load contents of .env into process.env
-dotenv.config();
 
 var mobile = '';
 var email = '';
@@ -28,9 +22,7 @@ router.get('/', function(req, res, _next) {
 
       var userid = req.session.userId;
 
-      oauth.getAccessToken().then((tokenData) => {
-        var access_token = tokenData.access_token;
-        ci.getUser(access_token, userid).then(userJson => {
+        ci.getUser(userid).then(userJson => {
           username = userJson.userName;
           mobile = userJson.phoneNumbers[0].value;
           email = userJson.emails[0].value;
@@ -49,7 +41,6 @@ router.get('/', function(req, res, _next) {
             otpMethod: method
           });
         });
-      });
     }
   }
 });

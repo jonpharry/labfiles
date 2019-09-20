@@ -1,10 +1,8 @@
 const express = require('express');
 
 const dotenv = require('dotenv');
-const oauth = require('../oauth.js');
 const ci = require('../cloudidentity.js');
 
-var app = express();
 var router = express.Router();
 
 // load contents of .env into process.env
@@ -13,38 +11,39 @@ dotenv.config();
 var reg_id = process.env.VERIFY_REG_ID;
 
 router.get('/', function(req, res, _next) {
-  oauth.getAccessToken().then((tokenData) => {
-    ci.initiateQRLogin(tokenData.access_token, reg_id).then((qrTxn) => {
+    ci.initiateQRLogin(reg_id).then((qrTxn) => {
       req.session.qrtxn = qrTxn;
       res.render('userlogin', {
         title: 'Login',
         qrCode: qrTxn.qrCode
       });
     });
-  });
 });
 
 router.get('/check', function(req, res, _next) {
   console.log("Authenticated: " + req.session.authenticated);
-  oauth.getAccessToken().then((tokenData) => {
-    ci.validateQRLogin(tokenData.access_token, req.session.qrtxn).then((body) => {
+    ci.validateQRLogin(req.session.qrtxn).then((body) => {
       if (body.state) {
         if (body.state == "SUCCESS") {
           req.session.authenticated = true;
+          delete req.session.qrtxn
           req.session.userId = body.userId;
-          ci.getUser(tokenData.access_token, req.session.userId).then((user) => {
+          ci.getUser(req.session.userId).then((user) => {
             req.session.username = user.userName;
             if (user.displayName) {
               req.session.displayName = user.displayName;
             } else {
               req.session.displayName = user.userName;
             }
-            if (!req.session.afterlogin) {
-              req.session.afterlogin = "userhome";
+            if (req.session.afterlogin) {
+              url = req.session.afterlogin;
+              delete req.session.afterlogin;
+            } else {
+              url = "userhome";
             }
             res.json({
               "state": body.state,
-              "next": req.session.afterlogin
+              "next": url
             });
           });
         } else {
@@ -58,13 +57,11 @@ router.get('/check', function(req, res, _next) {
         });
       }
     });
-  });
 });
 
 router.post('/', function(req, res, _next) {
   if (req.body.username && req.body.password) {
-    oauth.getAccessToken().then((tokenData) => {
-      ci.passwordLogin(tokenData.access_token, req.body.username, req.body.password).then((body) => {
+      ci.passwordLogin(req.body.username, req.body.password).then((body) => {
           req.session.userId = body.id;
           if (!(req.session.userId)) {
             res.render('error', {
@@ -80,7 +77,9 @@ router.post('/', function(req, res, _next) {
               req.session.displayName = body.userName;
             }
             if (req.session.afterlogin) {
-              res.redirect('/' + req.session.afterlogin);
+              var url = req.session.afterlogin;
+              delete req.session.afterlogin;
+              res.redirect('/' + url);
             } else {
               res.redirect('/userhome');
             }
@@ -93,7 +92,6 @@ router.post('/', function(req, res, _next) {
           });
           console.log(err);
         });
-    });
   } else {
     console.log("Username and password should be provided");
     res.render('error', {
