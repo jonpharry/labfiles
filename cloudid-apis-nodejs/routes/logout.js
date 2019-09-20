@@ -1,14 +1,9 @@
 const express = require('express');
 var router = express.Router();
 
-const dotenv = require('dotenv');
-
-// load contents of .env into process.env
-dotenv.config();
-
-/* GET home page. */
+/* Perform Logout */
 router.get('/', function(req, res, _next) {
-  console.log("Logout");
+  console.log("Perform Logout");
   req.session.authenticated = false;
   delete req.session.displayName;
   delete req.session.userId;

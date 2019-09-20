@@ -29,7 +29,7 @@ block content
        function startPolling() {
         req = new XMLHttpRequest();
         req.onreadystatechange = processResponse;
-        req.open("GET", "/userlogin/check", true);
+        req.open("GET", "/userlogin/qrcheck", true);
         req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         req.setRequestHeader("Accept", "application/json;charset=UTF-8");
         req.send();
@@ -50,7 +50,7 @@ block content
           center
             img(src='data:image/png;base64,'+qrCode alt='qrcode')
                       
-  form(method='POST' action='/userlogin')
+  form(method='POST' action='/userlogin/pwdcheck')
       .panellogin
         .panel-header
           center
