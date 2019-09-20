@@ -85,8 +85,6 @@ router.post('/', function(req, res, _next) {
             status: "400"
           });
         }
-
-
       });
   } else {
     res.render('error', {

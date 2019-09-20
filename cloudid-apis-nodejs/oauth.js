@@ -1,3 +1,6 @@
+// This module provides a function for obtaining an
+// Access Token from Cloud Identity using client credentials
+
 // Using IBM Verify SDK to get OAuth functions
 // These could easily be written natively if preferred
 const OAuthContext = require('ibm-verify-sdk').OAuthContext;
