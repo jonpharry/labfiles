@@ -8,7 +8,7 @@ router.get('/', function(req, res, _next) {
     req.session.afterlogin="userhome";
     res.redirect('/userlogin');
   } else {
-    res.render('bank', {
+    res.render('userhome', {
       title: 'User Homepage',
       displayName: req.session.displayName,
       balance: '100',
