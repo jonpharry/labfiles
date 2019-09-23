@@ -7,14 +7,6 @@ block content
      .header
         .header-title
           h2 Please Sign In
-  .container.two(height='500px')
-     .panelqr
-       .panel-header
-          center
-            h3 QR Code Login
-       .panel-body
-          center
-            img(src='data:image/png;base64,'+qrCode alt='qrcode')
                       
   form(method='POST' action='/userlogin/pwdcheck')
       .panellogin
