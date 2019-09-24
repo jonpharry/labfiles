@@ -28,6 +28,8 @@ router.get('/', function(req, res, _next) {
       destination = mobileNo;
     }
 
+    // Need to initiate OTP here
+
     // Hard-coded hint
     var hint = "1234";
 
