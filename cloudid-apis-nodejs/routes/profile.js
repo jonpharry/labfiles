@@ -15,25 +15,14 @@ router.get('/', function(req, res, _next) {
       req.session.afterotp = "profile";
       res.redirect('/otp');
     } else { // User has performed OTP in this session
-
-      // Hard-coded user information
-      var userJson = {
-        "userName": req.session.username,
-        "emails": [{
-          "value": "user@example.com"
-        }],
-        "phoneNumbers": [{
-          "value": "+15551234"
-        }]
-      }
-
-      // Display Profile page with data extracted from response
-      res.render('profile', {
-        title: 'User Profile',
-        username: userJson.userName,
-        email: userJson.emails[0].value,
-        mobile: userJson.phoneNumbers[0].value || "Not Provided",
-      });
+        var userJson = req.session.user;
+        // Display Profile page
+        res.render('profile', {
+          title: 'User Profile',
+          username: userJson.userName,
+          email: userJson.emails[0].value,
+          mobile: userJson.phoneNumbers[0].value || "Not Provided",
+        });
     }
   }
 });

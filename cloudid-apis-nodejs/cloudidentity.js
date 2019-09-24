@@ -41,7 +41,7 @@ function getUser(userid) {
           console.log(body);
           // Return the SCIM response as a JSON object
           resolve(JSON.parse(body));
-      });
+      }).catch(e => reject(e));
     }).catch(e => reject(e));
   });
 }
@@ -85,7 +85,7 @@ function generateOTP(login_method, userData) {
           console.log(body);
           //Resolve Promise to returned body
           resolve(body);
-      });
+      }).catch(e => reject(e));
     }).catch(e => reject(e));
   });
 }
@@ -125,7 +125,7 @@ function validateOTP(otpInitResponse, otp) {
           console.log(body);
           // Resolve the Promise to the response body.
           resolve(JSON.parse(body));
-      });
+      }).catch(e => reject(e));
     }).catch(e => reject(e));
   });
 }
@@ -149,7 +149,7 @@ function initiateQRLogin(regId) {
           console.log(body);
           // Resolve Promise to the response body
           resolve(JSON.parse(body));
-      });
+      }).catch(e => reject(e));
     }).catch(e => reject(e));
   });
 }
@@ -171,13 +171,12 @@ function validateQRLogin(qrInitResponse) {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + tokenData.access_token
         }
       }).then(body => {
           console.log(body);
           //Resolve Promise to the response body
           resolve(JSON.parse(body));
-      });
+      }).catch(e => reject(e));
     }).catch(e => reject(e));
   });
 }
@@ -211,7 +210,7 @@ function passwordLogin(uid, pw) {
         // Resolve Promise to the response from CI
         // This will contain user data if login was successful
         resolve(JSON.parse(body));
-      });
+      }).catch(e => reject(e));
     }).catch(e => reject(e));
   });
 }

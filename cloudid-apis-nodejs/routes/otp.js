@@ -12,20 +12,14 @@ router.get('/', function(req, res, _next) {
     res.redirect('/userlogin');
   } else { // User is authenticated
 
-    // Hard-coded user information
-    var userJson = {
-      "emails": [{
-        "value": "user@example.com"
-      }],
-      "phoneNumbers": [{
-        "value": "+15551234"
-      }]
-    }
-    // Extract e-mail address
+    // Get user from session
+    var userJson = req.session.user;
+
+    // Extract e-mail address from userJson
     var destination = userJson.emails[0].value;
     var method = "email";
 
-    // Extract mobile number
+    // Extract mobile number from userJson
     var mobileNo = userJson.phoneNumbers[0].value;
 
     // If mobile number defined, prefer this for OTP
