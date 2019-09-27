@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "b3a32108-6c4e-4950-8247-a2a201e00a84",
-		"name": "IBM Cloud Identity V2.1",
+		"_postman_id": "2a3500fa-8ace-4270-afd3-ea38987b8af8",
+		"name": "IBM Cloud Identity V2.2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -509,134 +509,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://{{hostname}}/v2.0/Users?filter=userName+eq+\"{{test_username}}\"",
-							"protocol": "https",
-							"host": [
-								"{{hostname}}"
-							],
-							"path": [
-								"v2.0",
-								"Users"
-							],
-							"query": [
-								{
-									"key": "filter",
-									"value": "userName+eq+\"{{test_username}}\""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Applications",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "9354ecf5-3e1c-4ee5-858a-76d2a2de21e2",
-								"type": "text/javascript",
-								"exec": [
-									"pm.test(\"expect status code to be 200\", function() {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"expect response body to exist\", function() {",
-									"   pm.response.to.have.body();",
-									"});",
-									"",
-									"pm.test(\"expect response body to have totalResults\", function() {",
-									"   pm.response.to.have.jsonBody(\"totalResults\"); ",
-									"});",
-									"",
-									"pm.test(\"expect totalResults = 1\", function() {",
-									"   pm.expect(pm.response.json().totalResults).to.equal(1);",
-									"   let jsonData = JSON.parse(responseBody);",
-									"   pm.environment.set(\"test_userid\", jsonData.Resources[0].id);",
-									"});",
-									"",
-									"pm.test(\"expect test_userid to be set\", function () { ",
-									"    pm.expect(pm.environment.get(\"test_userid\")).to.exist; ",
-									"});",
-									""
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://{{hostname}}/v2.0/Users?filter=userName+eq+\"{{test_username}}\"",
-							"protocol": "https",
-							"host": [
-								"{{hostname}}"
-							],
-							"path": [
-								"v2.0",
-								"Users"
-							],
-							"query": [
-								{
-									"key": "filter",
-									"value": "userName+eq+\"{{test_username}}\""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Applications Copy",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "9354ecf5-3e1c-4ee5-858a-76d2a2de21e2",
-								"type": "text/javascript",
-								"exec": [
-									"pm.test(\"expect status code to be 200\", function() {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"expect response body to exist\", function() {",
-									"   pm.response.to.have.body();",
-									"});",
-									"",
-									"pm.test(\"expect response body to have totalResults\", function() {",
-									"   pm.response.to.have.jsonBody(\"totalResults\"); ",
-									"});",
-									"",
-									"pm.test(\"expect totalResults = 1\", function() {",
-									"   pm.expect(pm.response.json().totalResults).to.equal(1);",
-									"   let jsonData = JSON.parse(responseBody);",
-									"   pm.environment.set(\"test_userid\", jsonData.Resources[0].id);",
-									"});",
-									"",
-									"pm.test(\"expect test_userid to be set\", function () { ",
-									"    pm.expect(pm.environment.get(\"test_userid\")).to.exist; ",
-									"});",
-									""
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v2.0/Users?filter=userName+eq+\"{{test_username}}\"",
 							"protocol": "https",
@@ -681,10 +553,6 @@
 								"value": "Bearer {{access_token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnmethods?search=owner=\"{{test_userid}}\"",
 							"protocol": "{{scheme}}",
@@ -801,10 +669,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnconfig/authnmethods/emailotp/properties",
 							"protocol": "{{scheme}}",
@@ -916,10 +780,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/emailotp/transient/verification",
 							"protocol": "https",
@@ -1078,10 +938,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/emailotp/transient/verification/{{email_txnid}}",
 							"protocol": "https",
@@ -1204,10 +1060,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnconfig/authnmethods/smsotp/properties",
 							"protocol": "{{scheme}}",
@@ -1319,10 +1171,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/smsotp/transient/verification",
 							"protocol": "https",
@@ -1492,10 +1340,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/smsotp/transient/verification/{{sms_txnid}}",
 							"protocol": "https",
@@ -1870,10 +1714,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnconfig/authnmethods/totp/properties",
 							"protocol": "{{scheme}}",
@@ -1960,10 +1800,6 @@
 								"value": "Bearer {{access_token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnmethods/totp/",
 							"protocol": "{{scheme}}",
@@ -2670,10 +2506,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnmethods/totp?search=owner%20%3D%20%22{{test_userid}}%22",
 							"protocol": "{{scheme}}",
@@ -2705,10 +2537,6 @@
 								"value": "Bearer {{access_token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnmethods/totp/{{totp_id}}",
 							"protocol": "{{scheme}}",
@@ -2943,10 +2771,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnconfig/authnmethods/emailotp/properties",
 							"protocol": "{{scheme}}",
@@ -3032,10 +2856,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/emailotp",
 							"protocol": "https",
@@ -3166,10 +2986,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnmethods/emailotp?search=owner%20%3D%20%22{{test_userid}}%22",
 							"protocol": "{{scheme}}",
@@ -3227,10 +3043,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/emailotp/{{emailotp_id}}",
 							"protocol": "https",
@@ -3300,10 +3112,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/emailotp/{{emailotp_id}}/validator",
 							"protocol": "https",
@@ -3394,10 +3202,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/emailotp/{{emailotp_id}}/validator/{{emailotp_vid}}",
 							"protocol": "https",
@@ -3558,10 +3362,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/emailotp/{{emailotp_id}}/verification",
 							"protocol": "https",
@@ -3682,10 +3482,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/emailotp/{{emailotp_id}}/verification/{{emailotp_vid}}",
 							"protocol": "https",
@@ -3893,10 +3689,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnconfig/authnmethods/smsotp/properties",
 							"protocol": "{{scheme}}",
@@ -3983,10 +3775,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/smsotp",
 							"protocol": "https",
@@ -4116,10 +3904,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnmethods/smsotp?search=owner%20%3D%20%22{{test_userid}}%22",
 							"protocol": "{{scheme}}",
@@ -4177,10 +3961,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/smsotp/{{smsotp_id}}",
 							"protocol": "https",
@@ -4246,10 +4026,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/smsotp/{{smsotp_id}}/validator",
 							"protocol": "https",
@@ -4340,10 +4116,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/emailotp/{{smsotp_id}}/validator/{{smsotp_vid}}",
 							"protocol": "https",
@@ -4508,10 +4280,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/smsotp/{{smsotp_id}}/verification",
 							"protocol": "https",
@@ -4633,10 +4401,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/authnmethods/smsotp/{{smsotp_id}}/verification/{{smsotp_vid}}",
 							"protocol": "https",
@@ -4844,10 +4608,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnmethods/signature",
 							"protocol": "{{scheme}}",
@@ -4864,7 +4624,7 @@
 					"response": []
 				},
 				{
-					"name": "Set Signature Auth Method Config (to enable)",
+					"name": "#Set Signature Auth Method Config (to enable)",
 					"event": [
 						{
 							"listen": "test",
@@ -4926,10 +4686,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authenticators/clients",
 							"protocol": "{{scheme}}",
@@ -4946,7 +4702,7 @@
 					"response": []
 				},
 				{
-					"name": "Create new Authenticator Client",
+					"name": "#Create new Authenticator Client",
 					"event": [
 						{
 							"listen": "test",
@@ -5005,7 +4761,7 @@
 					"response": []
 				},
 				{
-					"name": "#Get Authenticator Client by Name",
+					"name": "Get Authenticator Client by Name",
 					"event": [
 						{
 							"listen": "test",
@@ -5042,10 +4798,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authenticators/clients?search=name%20%3D%20%22{{authclient_name}}%22",
 							"protocol": "{{scheme}}",
@@ -5086,10 +4838,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authenticators/clients/{{authclient_id}}/metadata",
 							"protocol": "{{scheme}}",
@@ -5108,7 +4856,7 @@
 					"response": []
 				},
 				{
-					"name": "Set Authenticator Client Metadata (set service name)",
+					"name": "#Set Authenticator Client Metadata (set service name)",
 					"event": [
 						{
 							"listen": "test",
@@ -5259,10 +5007,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authenticators",
 							"protocol": "{{scheme}}",
@@ -5462,10 +5206,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authenticators?search=owner%20%3D%20%22{{test_userid}}%22",
 							"protocol": "{{scheme}}",
@@ -5496,10 +5236,6 @@
 								"value": "Bearer {{access_token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authenticators/{{auth_id}}",
 							"protocol": "{{scheme}}",
@@ -5620,10 +5356,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnmethods/signatures",
 							"protocol": "{{scheme}}",
@@ -5700,10 +5432,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnmethods/signatures?search=owner%20%3D%20%22{{test_userid}}%22",
 							"protocol": "{{scheme}}",
@@ -5786,10 +5514,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnmethods/signatures?search=owner%20%3D%20%22{{test_userid}}%22",
 							"protocol": "{{scheme}}",
@@ -5861,10 +5585,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authnmethods/signatures/{{signature_id}}?_embedded=true",
 							"protocol": "{{scheme}}",
@@ -6056,10 +5776,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authenticators/{{auth_id}}/verifications/{{verification_id}}",
 							"protocol": "{{scheme}}",
@@ -6110,10 +5826,6 @@
 								"disabled": true
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/authenticators/{{auth_id}}/verifications",
 							"protocol": "{{scheme}}",
@@ -6295,7 +6007,298 @@
 			]
 		},
 		{
-			"name": "10 Provisioning V2.0",
+			"name": "10 QR Code Login",
+			"item": [
+				{
+					"name": "Get Authenticator Client by Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "06e784e0-6ef0-4293-bd3c-1bb6040d1a6e",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"expect response body to exist\", function() {",
+									"   pm.response.to.have.body();",
+									"});",
+									"",
+									"pm.test(\"expect response body to have clients\", function() {",
+									"   pm.response.to.have.jsonBody(\"clients\");",
+									"});",
+									"",
+									"pm.test(\"expect clients to have at least one member\", function() {",
+									"   pm.expect(pm.response.json().clients.length).to.be.above(0);",
+									"    let jsonData = JSON.parse(responseBody);",
+									"    pm.environment.set(\"authclient_id\", jsonData.clients[0].id);",
+									"});",
+									"",
+									"pm.test(\"expect authclient_id to be set\", function () { ",
+									"    pm.expect(pm.environment.get(\"authclient_id\")).to.exist; ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v1.0/authenticators/clients?search=name%20%3D%20%22{{authclient_name}}%22",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v1.0",
+								"authenticators",
+								"clients"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "name%20%3D%20%22{{authclient_name}}%22"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Initiate QR Code Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "06e784e0-6ef0-4293-bd3c-1bb6040d1a6e",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"expect response body to exist\", function() {",
+									"   pm.response.to.have.body();",
+									"});",
+									"",
+									"pm.test(\"expect response body to have id\", function() {",
+									"   pm.response.to.have.jsonBody(\"id\");",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"qr_id\", jsonData.id);",
+									"});",
+									"",
+									"pm.test(\"expect response body to have dsi\", function() {",
+									"   pm.response.to.have.jsonBody(\"dsi\");",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"qr_dsi\", jsonData.dsi);",
+									"});",
+									"",
+									"pm.test(\"expect response body to have lsi\", function() {",
+									"   pm.response.to.have.jsonBody(\"lsi\");",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"qr_lsi\", jsonData.lsi);",
+									"});",
+									"",
+									"pm.test(\"expect qr_id to be set\", function () { ",
+									"    pm.expect(pm.environment.get(\"qr_id\")).to.exist; ",
+									"});",
+									"",
+									"pm.test(\"expect qr_dsi to be set\", function () { ",
+									"    pm.expect(pm.environment.get(\"qr_dsi\")).to.exist; ",
+									"});",
+									"",
+									"pm.test(\"expect qr_lsi to be set\", function () { ",
+									"    pm.expect(pm.environment.get(\"qr_lsi\")).to.exist; ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v2.0/factors/qr/authenticate?profileId={{authclient_id}}",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v2.0",
+								"factors",
+								"qr",
+								"authenticate"
+							],
+							"query": [
+								{
+									"key": "profileId",
+									"value": "{{authclient_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check status of QR Code Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "06e784e0-6ef0-4293-bd3c-1bb6040d1a6e",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"expect response body to exist\", function() {",
+									"   pm.response.to.have.body();",
+									"});",
+									"",
+									"pm.test(\"expect response body to have userId\", function() {",
+									"   pm.response.to.have.jsonBody(\"userId\");",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"test_userid\", jsonData.userId);",
+									"   pm.environment.unset('qr_dsi');",
+									"   pm.environment.unset('qr_lsi');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v2.0/factors/qr/authenticate/{{qr_id}}?dsi={{qr_dsi}}",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v2.0",
+								"factors",
+								"qr",
+								"authenticate",
+								"{{qr_id}}"
+							],
+							"query": [
+								{
+									"key": "dsi",
+									"value": "{{qr_dsi}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://{{hostname}}/v2.0/Users/{{test_userid}}",
+							"protocol": "https",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v2.0",
+								"Users",
+								"{{test_userid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (incomplete) QR Code Login Verification",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "06e784e0-6ef0-4293-bd3c-1bb6040d1a6e",
+								"exec": [
+									"pm.test(\"expect status code to be 204\", function() {",
+									"    pm.response.to.have.status(204);",
+									"    pm.environment.unset('qr_dsi');",
+									"    pm.environment.unset('qr_id');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v2.0/factors/qr/{{qr_id}}",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v2.0",
+								"factors",
+								"qr",
+								"{{qr_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "401b5d18-d3c4-4cbd-94a1-20b589977856",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "bee9f1ea-d30e-49f2-a41c-eac2450ded70",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "11 Provisioning V2.0",
 			"item": [
 				{
 					"name": "Users API",
@@ -6319,10 +6322,6 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{scheme}}://{{hostname}}/v2.0/Users",
 									"protocol": "{{scheme}}",
@@ -6598,10 +6597,6 @@
 										"value": "Bearer {{access_token}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "https://{{hostname}}/v2.0/Users?filter=userName+eq+\"{{test_username}}\"",
 									"protocol": "https",
@@ -6632,10 +6627,6 @@
 										"value": "Bearer {{access_token}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "https://{{hostname}}/v2.0/Users/{{test_userid}}",
 									"protocol": "https",
@@ -6885,10 +6876,6 @@
 										"value": "Bearer {{access_token}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{scheme}}://{{hostname}}/v2.0/Schema/attributes",
 									"protocol": "{{scheme}}",
@@ -6928,10 +6915,6 @@
 										"value": "Bearer {{access_token}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{scheme}}://{{hostname}}/v2.0/Schema/attributes?count=10&startIndex=1&sortBy=scimName",
 									"protocol": "{{scheme}}",
@@ -6985,10 +6968,6 @@
 										"value": "Bearer {{access_token}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{scheme}}://{{hostname}}/v2.0/Schema/attributes?filter=default",
 									"protocol": "{{scheme}}",
@@ -7077,10 +7056,6 @@
 										"value": "Bearer {{access_token}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{scheme}}://{{hostname}}/v2.0/Schema/attributes?filter=custom",
 									"protocol": "{{scheme}}",
@@ -7170,10 +7145,6 @@
 										"value": "Bearer {{access_token}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{scheme}}://{{hostname}}/v2.0/Schema/attributes/customAttribute1",
 									"protocol": "{{scheme}}",
@@ -7929,10 +7900,6 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "https://{{hostname}}/v2.0/Groups/{{bulk_groupid}}",
 									"protocol": "https",
@@ -8471,10 +8438,6 @@
 										"value": "application/scim+json"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{scheme}}://{{hostname}}/v2.0/Groups",
 									"protocol": "{{scheme}}",
@@ -8593,7 +8556,7 @@
 			]
 		},
 		{
-			"name": "11 OAuth 2.0 Device Flow",
+			"name": "12 OAuth 2.0 Device Flow",
 			"item": [
 				{
 					"name": "Initiate Device Flow (/v1.0/endpoint/default/device_authorization)",
@@ -9005,7 +8968,7 @@
 								},
 								{
 									"key": "token",
-									"value": "{{access_token}}",
+									"value": "{{refresh_token}}",
 									"type": "text"
 								}
 							]
@@ -9054,7 +9017,619 @@
 			]
 		},
 		{
-			"name": "12 Branding Customization",
+			"name": "13 OAuth 2.0 ROPC Flow",
+			"item": [
+				{
+					"name": "Token Request (/v1.0/endpoint/default/token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d020ab91-2fea-4471-b80f-1ea55a8f3995",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"expect response body to exist\", function() {",
+									"   pm.response.to.have.body();",
+									"});",
+									"",
+									"pm.test(\"expect response body to have access_token\", function() {",
+									"   pm.response.to.have.jsonBody(\"access_token\");",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"access_token\", jsonData.access_token);",
+									"   pm.environment.unset('device_code');",
+									"});",
+									"",
+									"pm.test(\"expect response body to have refresh_token\", function() {",
+									"   pm.response.to.have.jsonBody(\"refresh_token\");",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+									"   pm.environment.unset('device_code');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{app_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{app_client_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{test_username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{test_password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/token",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Introspect (/v1.0/endpoint/default/introspect)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{app_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{app_client_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/introspect",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"introspect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#User Info (/v1.0/endpoint/default/userinfo)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/userinfo",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"userinfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Run Refresh Token Grant Flow",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "52550c91-afc6-4c8c-8279-3af4facd8965",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"expect response body to exist\", function() {",
+									"   pm.response.to.have.body();",
+									"});",
+									"",
+									"pm.test(\"expect response body to have access_token\", function() {",
+									"   pm.response.to.have.jsonBody(\"access_token\");",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"access_token\", jsonData.access_token);",
+									"});",
+									"",
+									"pm.test(\"expect response body to have refresh_token\", function() {",
+									"   pm.response.to.have.jsonBody(\"refresh_token\");",
+									"   let jsonData = JSON.parse(responseBody);",
+									"   pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "refresh_token",
+									"type": "text"
+								},
+								{
+									"key": "refresh_token",
+									"value": "{{refresh_token}}",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{app_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{app_client_secret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/token",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#Revoke Access (/oidc/endpoint/default/revoke)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{app_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{app_client_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/revoke",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"revoke"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "#Revoke Refresh (/oidc/endpoint/default/revoke)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{app_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{app_client_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "token",
+									"value": "{{refresh_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/oidc/endpoint/default/revoke",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"oidc",
+								"endpoint",
+								"default",
+								"revoke"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "14 Grant Management",
+			"item": [
+				{
+					"name": "Get ALL Grants",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "39a59a05-c66e-4359-9724-a26eebf60293",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v1.0/grants",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v1.0",
+								"grants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Grants for User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "39a59a05-c66e-4359-9724-a26eebf60293",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v1.0/usergrants",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v1.0",
+								"usergrants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Grants for App (that user owns)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "39a59a05-c66e-4359-9724-a26eebf60293",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v1.0/appgrants",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v1.0",
+								"appgrants"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "15 Consent Management",
+			"item": [
+				{
+					"name": "Get ALL Consents",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "39a59a05-c66e-4359-9724-a26eebf60293",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v1.0/consents",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v1.0",
+								"consents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Consents for User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "39a59a05-c66e-4359-9724-a26eebf60293",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v1.0/userconsents",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v1.0",
+								"userconsents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Consents for App (that user owns)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "39a59a05-c66e-4359-9724-a26eebf60293",
+								"exec": [
+									"pm.test(\"expect status code to be 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{scheme}}://{{hostname}}/v1.0/appconsents",
+							"protocol": "{{scheme}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"v1.0",
+								"appconsents"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "16 Branding Customization",
 			"item": [
 				{
 					"name": "#Get Default Template Pages ZIP (/v1.0/branding/download)",
@@ -9075,10 +9650,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/branding/download?customized=false",
 							"protocol": "{{scheme}}",
@@ -9119,10 +9690,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/branding/download",
 							"protocol": "{{scheme}}",
@@ -9168,8 +9735,8 @@
 							"formdata": [
 								{
 									"key": "formData",
-									"type": "file",
-									"src": ""
+									"value": "",
+									"type": "file"
 								}
 							]
 						},
@@ -9317,10 +9884,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/authsvc/mtfim/sps/authsvc?PolicyId=urn:ibm:security:authentication:asf:basicldapuser&Target={{target}}",
 							"protocol": "{{scheme}}",
@@ -9599,10 +10162,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{clientUri}}",
 							"host": [
@@ -9717,10 +10276,6 @@
 								"value": "Bearer {{access_token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{scheme}}://{{hostname}}/v1.0/Users",
 							"protocol": "{{scheme}}",
@@ -9990,10 +10545,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/Users?filter=userName+eq+\"{{test_username}}\"",
 							"protocol": "https",
@@ -10033,10 +10584,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://{{hostname}}/v1.0/Users/{{test_userid}}",
 							"protocol": "https",
