@@ -1,5 +1,5 @@
 // SAM SAML 2.0 IdP Mapping rule
-// for use with CIC Cookbook
+// for use with IBM Cloud Identity "Access Manager as an Identity Source" Cookbook
 importClass(Packages.com.tivoli.am.fim.trustserver.sts.uuser.Attribute);
 importClass(Packages.com.tivoli.am.fim.trustserver.sts.uuser.AttributeStatement);
 
@@ -18,8 +18,11 @@ function jsToJavaArray(jsArray) {
   return javaArray;
 }
 
-// Build username of form <SAM user ID>@<tenantID>.ice.ibmcloud.com
-username = stsuu.getPrincipalName() + "@" + tenantid + ".ice.ibmcloud.com";
+// Get username from incoming principal name (ISAM Username)
+var username = stsuu.getPrincipalName();
+
+// Set qualified_username to form <tenantid>/<username>
+var qualified_username = tenantid + "/" + username;
 
 var groups = [];
 
@@ -46,6 +49,10 @@ for (var it = stsuu.getGroups(); it.hasNext();) {
 
 // Start with an empty group of attributes.
 var finalAttrs = [];
+
+// Build saas_userid with form <username>@<tenantID>.ice.ibmcloud.com
+var saas_userid = username + "@" + tenantid + ".ice.ibmcloud.com";
+finalAttrs.push(new Attribute("saas_userid", "urn:oasis:names:tc:SAML:2.0:attrname-format:basic", saas_userid));
 
 // Get the user description (which container e-mail and mobile number).
 var description = stsuu.getAttributeContainer().getAttributeValueByName("description");
@@ -88,8 +95,8 @@ finalAttrs.push(new Attribute("groups", "urn:oasis:names:tc:SAML:2.0:attrname-fo
 //Clear the working object.  We will explicitly add back everything we waant to send in the SAML to CIC.
 stsuu.clear();
 
-// Set the NameID attribute of the SAML assertion to the generated username
-stsuu.addPrincipalAttribute(new Attribute("name", "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress", username));
+// Set the NameID attribute of the SAML assertion to the generated qualified_username
+stsuu.addPrincipalAttribute(new Attribute("name", "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress", qualified_username));
 
 // Add attributes from finaAttrs
 for (var i = 0; i < finalAttrs.length; i++) {
