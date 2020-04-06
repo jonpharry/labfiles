@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "acorn": "^7.1.1",
+    "acorn-globals": "^6.0.0",
     "cookie-parser": "^1.4.5",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
