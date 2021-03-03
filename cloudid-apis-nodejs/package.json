@@ -16,7 +16,7 @@
     "http-errors": "~1.6.3",
     "ibm-verify-sdk": "^1.2.3",
     "morgan": "~1.9.1",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.8"
   }
